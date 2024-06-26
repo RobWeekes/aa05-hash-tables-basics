@@ -10,29 +10,31 @@ class KeyValuePair {
 
 class HashTable {
 
-  constructor(numBuckets = 4) {
-    // Your code here 
-  }
+    constructor(numBuckets = 4) {
+        this.count = 0;
+        this.capacity = numBuckets;
+        this.data = new Array(this.capacity).fill(null);
+    }
 
-  hash(key) {
-    // Your code here 
-  }
+    hash(key) {
+        
+    }
 
-  hashMod(key) {
-    // Your code here 
-  }
+    hashMod(key) {
 
-  insertNoCollisions(key, value) {
-    // Your code here 
-  }
+    }
 
-  insertWithHashCollisions(key, value) {
-    // Your code here 
-  }
+    insertNoCollisions(key, value) {
 
-  insert(key, value) {
-    // Your code here 
-  }
+    }
+
+    insertWithHashCollisions(key, value) {
+
+    }
+
+    insert(key, value) {
+
+    }
 
 }
 
