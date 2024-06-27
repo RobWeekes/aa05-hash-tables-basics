@@ -98,5 +98,23 @@ hashTable.insertWithHashCollisions("key-1", "val-1");
 hashTable.insertWithHashCollisions("key-2", "val-2");
 hashTable.insertWithHashCollisions("key-3", "val-3");
 
+console.log(hashTable.count) // (3);
+console.log(hashTable.capacity) // (2);
+console.log(hashTable.data.length) // (2);
+
+const pairC = hashTable.data[0];
+const pairB = hashTable.data[1];
+const pairA = hashTable.data[0].next;   // pairA was head, then bumped over by pairC
+
+console.log(pairA.key) // ("key-1");
+console.log(pairA.value) // ("val-1");
+
+console.log(pairB.key) // ("key-2");
+console.log(pairB.value) // ("val-2");
+
+console.log(pairC.key) // ("key-3");
+console.log(pairC.value) // ("val-3");
+
+
 
 module.exports = HashTable;
