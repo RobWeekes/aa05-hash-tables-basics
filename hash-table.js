@@ -47,13 +47,13 @@ class HashTable {
         const index = this.hashMod(key);  // assign index for new pair
         console.log(index);
         const newPair = new KeyValuePair(key, value);
-        let current = this.data[index];
+        let currentPair = this.data[index];
 
         // if there is already a key/value pair at that index,
-        if(current) {  // set up linked list chaining
-            console.log(current);
-            newPair.next = current;   // newPair becomes the head, bump the old "current" to the right
-            this.data[index] = newPair;   // cannot use 'current' variable on the left, must set new data point manually
+        if(currentPair) {  // set up linked list chaining
+            console.log(currentPair);
+            newPair.next = currentPair;   // newPair becomes the head, bump the old "currentPair" to the right
+            this.data[index] = newPair;   // cannot use 'currentPair' variable on the left, must set new data point manually
         } else {    // inserting new pair into empty bucket \/
             this.data[index] = newPair; // assign value at new hashed index
         }
@@ -61,9 +61,29 @@ class HashTable {
     }
 
     insert(key, value) {
+        const index = this.hashMod(key);  // assign i for new pair
+        console.log(index);
+        const newPair = new KeyValuePair(key, value);
+        let currentPair = this.data[index];
 
+        // If the new KeyValuePair contains the same key as a pair already in the hash table, 
+        // the method will overwrite the old value with the one from the newly inserted pair.     
+        while(currentPair && currentPair.key !== key) {
+            currentPair = currentPair.next;   // traverse until finding a key match or null->
+        }   // currentPair stops at a matching key or reaches tail & becomes null
+        if(currentPair) { // if truthy, this is a matching key value node -- OVERWRITE value
+            currentPair.value = value;
+            return;
+        }   // if this block executes, there was no key match \/
+        if(this.data[index]) {  // if there is already a pair there, set up linked list chaining ->
+            newPair.next = this.data[index]; // newPair becomes head, points -> old node to the right
+            this.data[index] = newPair;   // cannot use 'currentPair' variable on the left, must set new data point manually
+        } else {    // inserting new pair into empty bucket \/
+            this.data[index] = newPair; // assign value at new hashed index
+        }
+        this.count++;
+        // insertWithHashCollisions(key, value);  // cant use because this does not allow updating existing keys
     }
-
 }
 
 // // local testing
@@ -91,30 +111,55 @@ class HashTable {
 
 // // phase 3
 
+// hashTable = new HashTable(2);
+
+// // index: 0, 1, 0 (key3 collides with key 1, head)
+// hashTable.insertWithHashCollisions("key-1", "val-1");
+// hashTable.insertWithHashCollisions("key-2", "val-2");
+// hashTable.insertWithHashCollisions("key-3", "val-3");
+
+// console.log(hashTable.count) // (3);
+// console.log(hashTable.capacity) // (2);
+// console.log(hashTable.data.length) // (2);
+
+// const pairC = hashTable.data[0];
+// const pairB = hashTable.data[1];
+// const pairA = hashTable.data[0].next;   // pairA was head, then bumped over by pairC
+
+// console.log(pairA.key) // ("key-1");
+// console.log(pairA.value) // ("val-1");
+
+// console.log(pairB.key) // ("key-2");
+// console.log(pairB.value) // ("val-2");
+
+// console.log(pairC.key) // ("key-3");
+// console.log(pairC.value) // ("val-3");
+
+// // phase 4
+
 hashTable = new HashTable(2);
 
-// index: 0, 1, 0 (key3 collides with key 1, head)
-hashTable.insertWithHashCollisions("key-1", "val-1");
-hashTable.insertWithHashCollisions("key-2", "val-2");
-hashTable.insertWithHashCollisions("key-3", "val-3");
+hashTable.insert("key-1", "val-1");
+hashTable.insert("key-2", "val-2");
+hashTable.insert("key-3", "val-3");
+hashTable.insert("key-1", "val-100000");
 
 console.log(hashTable.count) // (3);
 console.log(hashTable.capacity) // (2);
-console.log(hashTable.data.length) // (2);
+console.log(hashTable.data.length) // .equal(2);
 
 const pairC = hashTable.data[0];
 const pairB = hashTable.data[1];
-const pairA = hashTable.data[0].next;   // pairA was head, then bumped over by pairC
+const pairA = hashTable.data[0].next;
 
 console.log(pairA.key) // ("key-1");
-console.log(pairA.value) // ("val-1");
+console.log(pairA.value) // ("val-100000");
 
 console.log(pairB.key) // ("key-2");
 console.log(pairB.value) // ("val-2");
 
 console.log(pairC.key) // ("key-3");
 console.log(pairC.value) // ("val-3");
-
 
 
 module.exports = HashTable;
